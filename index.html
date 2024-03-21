@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="CAGE generates and animates scenes from sparse DINOv2 features.">
+  <meta name="keywords" content="CAGE, Video Generation, Scene Generation, Unsupervised Learning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Enabling Visual Composition and Animation in Unsupervised Video Generation</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://araachie.github.io">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://araachie.github.io/yoda">
+            YODA
+          </a>
+          <a class="navbar-item" href="https://araachie.github.io/river">
+            RIVER
+          </a>
+          <a class="navbar-item" href="https://araachie.github.io/glass">
+            GLASS
+          </a>
+          <a class="navbar-item" href="https://araachie.github.io/koala">
+            KOALA
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Enabling Visual Composition and Animation in Unsupervised Video Generation</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://araachie.github.io">Aram Davtyan</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://github.com/separius">Sepehr Sameni</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://ommer-lab.com/people/ommer/">Björn Ommer</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="http://cvg.unibe.ch/people/favaro">Paolo Favaro</a><sup>1</sup>
+            </span>
+            
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Computer Vision Group, Institute of Informatics, University of Bern, Switzerland</span>
+            <span class="author-block"><sup>2</sup>CompVis @ LMU Munich and MCML, Germany</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/none"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/none"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/araachie/cage"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+        
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser is-light">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <br>
+      <h2 class="subtitle has-text-centered">
+        Our model, <span class="dnerf">CAGE</span>, is designed to both compose and animate scenes from a sparse set of visual features. The model is trained in an unsupervised way from a dataset of unannotated videos.
+      </h2>
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item container-center">
+            <img src="./static/videos/clevrer_comp_0/source_00000.png", width="19%">
+            <img src="./static/videos/clevrer_comp_0/source_00001.png", width="19%">
+            <img src="./static/videos/clevrer_comp_0/source_00002.png", width="19%">
+            <img src="./static/videos/clevrer_comp_0/controls.png", width="19%">
+            <img src="./static/videos/clevrer_comp_0/video.gif", width="19%">
+            <br>
+            <img src="./static/videos/bair_comp_0/source_00000.png", width="19%">
+            <img src="./static/videos/bair_comp_0/source_00001.png", width="19%">
+            <img src="./static/videos/bair_comp_0/source_00002.png", width="19%">
+            <img src="./static/videos/bair_comp_0/controls.png", width="19%">
+            <img src="./static/videos/bair_comp_0/video.gif", width="19%">
+        </div>
+        <div class="item container-center">
+          <img src="./static/videos/clevrer_comp_4/source_00000.png", width="19%">
+          <img src="./static/videos/clevrer_comp_4/source_00001.png", width="19%">
+          <img src="./static/videos/clevrer_comp_4/controls.png", width="19%">
+          <img src="./static/videos/clevrer_comp_4/video.gif", width="19%">
+          <br>
+          <img src="./static/videos/bair_comp_2/source_00000.png", width="19%">
+          <img src="./static/videos/bair_comp_2/source_00001.png", width="19%">
+          <img src="./static/videos/bair_comp_2/controls.png", width="19%">
+          <img src="./static/videos/bair_comp_2/video.gif", width="19%">
+        </div>
+        <div class="item container-center">
+          <img src="./static/videos/clevrer_comp_3/source_00000.png", width="19%">
+          <img src="./static/videos/clevrer_comp_3/source_00001.png", width="19%">
+          <img src="./static/videos/clevrer_comp_3/source_00002.png", width="19%">
+          <img src="./static/videos/clevrer_comp_3/controls.png", width="19%">
+          <img src="./static/videos/clevrer_comp_3/video.gif", width="19%">
+          <br>
+          <img src="./static/videos/bair_comp_4/source_00001.png", width="19%", style="opacity:0.0">
+          <img src="./static/videos/bair_comp_4/source_00000.png", width="19%">
+          <img src="./static/videos/bair_comp_4/source_00001.png", width="19%">
+          <img src="./static/videos/bair_comp_4/controls.png", width="19%">
+          <img src="./static/videos/bair_comp_4/video.gif", width="19%">
+        </div>
+        <div class="item container-center">
+          <img src="./static/videos/clevrer_comp_5/source_00000.png", width="19%">
+          <img src="./static/videos/clevrer_comp_5/controls.png", width="19%">
+          <img src="./static/videos/clevrer_comp_5/video.gif", width="19%">
+          <br>
+          <img src="./static/videos/bair_comp_5/source_00000.png", width="19%">
+          <img src="./static/videos/bair_comp_5/controls.png", width="19%">
+          <img src="./static/videos/bair_comp_5/video.gif", width="19%">
+        </div>
+        <div class="item container-center">
+          <img src="./static/videos/clevrer_comp_1/source_00000.png", width="19%">
+          <img src="./static/videos/clevrer_comp_1/source_00001.png", width="19%">
+          <img src="./static/videos/clevrer_comp_1/source_00002.png", width="19%">
+          <img src="./static/videos/clevrer_comp_1/controls.png", width="19%">
+          <img src="./static/videos/clevrer_comp_1/video.gif", width="19%">
+          <br>
+          <img src="./static/videos/bair_comp_1/source_00001.png", width="19%", style="opacity:0.0">
+          <img src="./static/videos/bair_comp_1/source_00000.png", width="19%">
+          <img src="./static/videos/bair_comp_1/source_00001.png", width="19%">          
+          <img src="./static/videos/bair_comp_1/controls.png", width="19%">
+          <img src="./static/videos/bair_comp_1/video.gif", width="19%">
+        </div>
+        <div class="item container-center">
+          <img src="./static/videos/clevrer_comp_2/source_00000.png", width="19%">
+          <img src="./static/videos/clevrer_comp_2/source_00001.png", width="19%">
+          <img src="./static/videos/clevrer_comp_2/source_00002.png", width="19%">
+          <img src="./static/videos/clevrer_comp_2/controls.png", width="19%">
+          <img src="./static/videos/clevrer_comp_2/video.gif", width="19%">
+          <br>
+          <img src="./static/videos/bair_comp_3/source_00001.png", width="19%", style="opacity:0.0">
+          <img src="./static/videos/bair_comp_3/source_00000.png", width="19%">
+          <img src="./static/videos/bair_comp_3/source_00001.png", width="19%">          
+          <img src="./static/videos/bair_comp_3/controls.png", width="19%">
+          <img src="./static/videos/bair_comp_3/video.gif", width="19%">
+        </div>
+        <div class="item container-center">
+          <img src="./static/videos/epic_comp_1/source_00000.png", width="19%">
+            <img src="./static/videos/epic_comp_1/controls.png", width="19%">
+            <img src="./static/videos/epic_comp_1/video.gif", width="19%">
+            <br>
+            <img src="./static/videos/epic_comp_2/source_00000.png", width="19%">
+            <img src="./static/videos/epic_comp_2/controls.png", width="19%">
+            <img src="./static/videos/epic_comp_2/video.gif", width="19%">
+        </div>
+        
+        
+      </div>
+      <br>
+      <div class="has-text-centered">
+        The features are extracted from the regions shown as overlaying red patches. They are then rearranged and pasted to the corresponding locations in the control layout. 
+        Blue patches in the controls correspond to the intended future locations of the objects. Notice the ability of the model to carefully adjust the appearances (e.g. sizes, 
+        shadows and lights) of the objects based on their location. Due to the stochastic nature of the model, the motion of uncontrolled objects is random.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            In this work we propose a novel method for unsupervised controllable video generation. 
+            Once trained on a dataset of unannotated videos, at inference our model is capable of both 
+            composing scenes of predefined object parts and animating them in a plausible and controlled way. 
+          </p>
+          <p>
+            This is achieved by conditioning video generation on a randomly selected subset of local pre-trained 
+            self-supervised features during training. We call our model <span class="dnerf">CAGE</span> for visual Composition and Animation for video GEneration.
+          </p>
+          <p>
+             We conduct a series of experiments to demonstrate capabilities of <span class="dnerf">CAGE</span> in various settings.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+
+      <div class="columns is-centered">
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-3">Training Pipeline</h2>
+            <div class="has-text-centered">
+              <image src="./static/images/pipeline.png">
+            </div>
+            <p>
+              The overall pipeline of <span class="dnerf">CAGE</span>. The model takes all the colored frames and processes them equally and in parallel. The pipeline for a single frame (in red) is illustrated. <span class="dnerf">CAGE</span> is trained to predict the denoising direction for the future frames in the Conditional Flow Matching framework conditioned on the past frames (<tt>context</tt> and <tt>reference</tt>) and sparse random sets of DINOv2 features. The frames communicate with each other via the Temporal Blocks while being separately processed by the Spatial Blocks. The controls are incorporated through Cross-Attention.
+            </p>
+            <div class="has-text-centered">
+              <image src="./static/images/controls.png">
+            </div>
+            <p>
+              In order to prevent overfitting to the position information that is present in DINOv2 features as well as to impose some scale invariance, the features are calculated on random crops and then pasted back to their original locations.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered">
+
+      <div class="column">
+        <div class="content">
+          <h2 class="title is-3">Out of Distribution Controls</h2>
+          <p>
+            Here we demonstrate some generalization of <span class="dnerf">CAGE</span> to out of distribution controls. Those include curved trajectories and sudden changes in velocity in CLEVRER, and moving background objects in BAIR. Notice that sometimes our models manage to cast the o.o.d. controls to in distribution ones (e.g. by introducing new objects in CLEVRER that collide with the controlled object, the 2nd example in the first row). This shows the emergent planning capabilities of <span class="dnerf">CAGE</span>.
+          </p>
+
+          <div class="container-center">
+            <p>
+              <img src="./static/videos/clevrer_ood_1/controls.png", width="20%">
+              <img src="./static/videos/clevrer_ood_1/video.gif", width="20%">
+              <img src="./static/videos/clevrer_ood_2/controls.png", width="20%">
+              <img src="./static/videos/clevrer_ood_2/video.gif", width="20%">
+            </p>
+            <p>
+              <img src="./static/videos/clevrer_ood_3/controls.png", width="20%">
+              <img src="./static/videos/clevrer_ood_3/video.gif", width="20%">
+              <img src="./static/videos/clevrer_ood_4/controls.png", width="20%">
+              <img src="./static/videos/clevrer_ood_4/video.gif", width="20%">
+            </p>
+            <p>
+              <img src="./static/videos/bair_ood_1/controls.png", width="20%">
+              <img src="./static/videos/bair_ood_1/video.gif", width="20%">
+              <img src="./static/videos/bair_ood_2/controls.png", width="20%">
+              <img src="./static/videos/bair_ood_2/video.gif", width="20%">
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+
+      <h2 class="title is-3">Cross-domain Transfer</h2>
+      
+
+      <div class="container">
+        <div id="results-carousel" class="carousel results-carousel">
+          <div class="item">
+            <div class="container-center">
+              <img src="./static/videos/clevrer_cross_2/source.png", width="37%">
+              <img src="./static/videos/clevrer_cross_2/controls.png", width="28%">
+              <img src="./static/videos/clevrer_cross_2/video.gif", width="28%">
+            </div>
+          </div>
+          <div class="item">
+            <div class="container-center">
+              <img src="./static/videos/clevrer_cross_1/source.png", width="37%">
+              <img src="./static/videos/clevrer_cross_1/controls.png", width="28%">
+              <img src="./static/videos/clevrer_cross_1/video.gif", width="28%">
+            </div>
+          </div>
+          <div class="item">
+            <div class="container-center">
+              <img src="./static/videos/bair_cross_1/source.png", width="37%">
+              <img src="./static/videos/bair_cross_1/controls.png", width="28%">
+              <img src="./static/videos/bair_cross_1/video.gif", width="28%">
+            </div>
+          </div>
+          <div class="item">
+            <div class="container-center">
+              <img src="./static/videos/bair_cross_2/source.png", width="37%">
+              <img src="./static/videos/bair_cross_2/controls.png", width="28%">
+              <img src="./static/videos/bair_cross_2/video.gif", width="28%">
+            </div>
+          </div>
+          <div class="item">
+            <div class="container-center">
+              <img src="./static/videos/epic_cross_1/source.png", width="37%">
+              <img src="./static/videos/epic_cross_1/controls.png", width="28%">
+              <img src="./static/videos/epic_cross_1/video.gif", width="28%">
+            </div>
+          </div>
+          <div class="item">
+            <div class="container-center">
+              <img src="./static/videos/epic_cross_2/source.png", width="37%">
+              <img src="./static/videos/epic_cross_2/controls.png", width="28%">
+              <img src="./static/videos/epic_cross_2/video.gif", width="28%">
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="has-text-centered">
+          With <span class="dnerf">CAGE</span> one is able to copy features from images coming from domains other than the training data and still compose and animate scenes based on those features. This is possible because our model is conditioned on data-agnostic abstract features extracted with DINOv2.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered">
+
+      <div class="column">
+        <div class="content">
+          <h2 class="title is-3">Comparison to Prior Work</h2>
+          <p>
+            This section shows some comparisons between <span class="dnerf">CAGE</span> (columns 1 for the controls and 2 for the generated videos) to the prior work <a href="https://araachie.github.io/yoda">YODA</a> (column 3).
+          </p>
+
+          <p>
+            <img src="./static/videos/epic_cage_1/controls.png", width="31%">
+            <img src="./static/videos/epic_cage_1/video.gif", width="31%">
+            <img src="./static/videos/epic_yoda_1/video.gif", width="31%">
+          </p>
+          <p>
+            <img src="./static/videos/epic_cage_2/controls.png", width="31%">
+            <img src="./static/videos/epic_cage_2/video.gif", width="31%">
+            <img src="./static/videos/epic_yoda_2/video.gif", width="31%">
+          </p>
+
+    </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered">
+
+      <div class="column">
+        <div class="content">
+          <h2 class="title is-3">Long Video Generation</h2>
+          <p>
+            Although in our controllability evaluation we mostly show short videos, thanks to its autoregressive nature <span class="dnerf">CAGE</span> is able to generate longer videos at inference. Here are a few examples of 512-frame-long videos generated with <span class="dnerf">CAGE</span>.
+          </p>
+
+          <p>
+            <img src="./static/videos/clevrer_long_1/source_00000.png", width="19%">
+            <img src="./static/videos/clevrer_long_1/source_00001.png", width="19%">
+            <img src="./static/videos/clevrer_long_1/source_00002.png", width="19%">
+            <img src="./static/videos/clevrer_long_1/controls.png", width="19%">
+            <img src="./static/videos/clevrer_long_1/video.gif", width="19%">
+          </p>
+          <p>
+            <img src="./static/videos/clevrer_long_2/source_00000.png", width="19%">
+            <img src="./static/videos/clevrer_long_2/source_00001.png", width="19%">
+            <img src="./static/videos/clevrer_long_2/source_00002.png", width="19%">
+            <img src="./static/videos/clevrer_long_2/controls.png", width="19%">
+            <img src="./static/videos/clevrer_long_2/video.gif", width="19%">
+          </p>
+
+    </div>
+</section>
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="content">
+        <h2 class="title is-3">Robustness to the Number of Controls</h2>
+        <p>
+          Here we show some generated sequences with only one vs many DINOv2 token provided per object. While <span class="dnerf">CAGE</span> is pretty robust to the number of controls provided and can inpaint the missing information, the sequences generated conditioned on more tokens are more consistent with the source image (e.g. in the second example on the second slide the blue cube does not rotate with more tokens provided, i.e. the pose of the object is fixed given the features).
+        </p>
+        <div id="results-carousel" class="carousel results-carousel">
+          <div class="item container-center">
+            <img src="./static/videos/clevrer_nc_1/source_00000.png", width="20%">
+            <img src="./static/videos/clevrer_nc_1/controls.png", width="20%">
+            <img src="./static/videos/clevrer_nc_1/video.gif", width="20%">
+            <br>
+            <img src="./static/videos/clevrer_nc_2/source_00000.png", width="20%">
+            <img src="./static/videos/clevrer_nc_2/controls.png", width="20%">
+            <img src="./static/videos/clevrer_nc_2/video.gif", width="20%">
+          </div>
+          <div class="item container-center">
+            <img src="./static/videos/clevrer_nc_3/source_00000.png", width="20%">
+            <img src="./static/videos/clevrer_nc_3/controls.png", width="20%">
+            <img src="./static/videos/clevrer_nc_3/video.gif", width="20%">
+            <br>
+            <img src="./static/videos/clevrer_nc_4/source_00000.png", width="20%">
+            <img src="./static/videos/clevrer_nc_4/controls.png", width="20%">
+            <img src="./static/videos/clevrer_nc_4/video.gif", width="20%">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3">BibTeX</h2>
+      <pre><code>Coming soon...</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered">
+          <p>
+            Website template borrowed from the <a
+              href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> project page. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
